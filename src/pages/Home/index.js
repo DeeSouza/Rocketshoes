@@ -1,113 +1,50 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { MdAddShoppingCart } from 'react-icons/md';
+import api from '../../services/api';
+import { formatPrice } from '../../util/format';
 
 import { ProductList } from './styles';
 
-export default function Home() {
-	return (
-		<ProductList>
-			<li>
-				<img
-					src="https://static.netshoes.com.br/produtos/58/HZM-1880-058/HZM-1880-058_detalhe1.jpg?ims=326x"
-					alt="Tênis"
-				/>
+export default class Home extends Component {
+	state = {
+		products: [],
+	};
 
-				<strong>Chuteira Top</strong>
-				<span>R$ 129,90</span>
+	async componentDidMount() {
+		const response = await api.get('products');
 
-				<button type="button">
-					<div>
-						<MdAddShoppingCart size={16} color="#FFF" /> 3
-					</div>
+		const data = response.data.map(product => ({
+			...product,
+			priceFormatted: formatPrice(product.price),
+		}));
 
-					<span>ADICIONAR AO CARRINHO</span>
-				</button>
-			</li>
-			<li>
-				<img
-					src="https://static.netshoes.com.br/produtos/58/HZM-1880-058/HZM-1880-058_detalhe1.jpg?ims=326x"
-					alt="Tênis"
-				/>
+		this.setState({
+			products: data,
+		});
+	}
 
-				<strong>Chuteira Top</strong>
-				<span>R$ 129,90</span>
+	render() {
+		const { products } = this.state;
 
-				<button type="button">
-					<div>
-						<MdAddShoppingCart size={16} color="#FFF" /> 3
-					</div>
+		return (
+			<ProductList>
+				{products.map(product => (
+					<li key={product.id}>
+						<img src={product.image} alt={product.title} />
 
-					<span>ADICIONAR AO CARRINHO</span>
-				</button>
-			</li>
-			<li>
-				<img
-					src="https://static.netshoes.com.br/produtos/58/HZM-1880-058/HZM-1880-058_detalhe1.jpg?ims=326x"
-					alt="Tênis"
-				/>
+						<strong>{product.title}</strong>
+						<span>{product.priceFormatted}</span>
 
-				<strong>Chuteira Top</strong>
-				<span>R$ 129,90</span>
+						<button type="button">
+							<div>
+								<MdAddShoppingCart size={16} color="#FFF" /> 3
+							</div>
 
-				<button type="button">
-					<div>
-						<MdAddShoppingCart size={16} color="#FFF" /> 3
-					</div>
-
-					<span>ADICIONAR AO CARRINHO</span>
-				</button>
-			</li>
-			<li>
-				<img
-					src="https://static.netshoes.com.br/produtos/58/HZM-1880-058/HZM-1880-058_detalhe1.jpg?ims=326x"
-					alt="Tênis"
-				/>
-
-				<strong>Chuteira Top</strong>
-				<span>R$ 129,90</span>
-
-				<button type="button">
-					<div>
-						<MdAddShoppingCart size={16} color="#FFF" /> 3
-					</div>
-
-					<span>ADICIONAR AO CARRINHO</span>
-				</button>
-			</li>
-			<li>
-				<img
-					src="https://static.netshoes.com.br/produtos/58/HZM-1880-058/HZM-1880-058_detalhe1.jpg?ims=326x"
-					alt="Tênis"
-				/>
-
-				<strong>Chuteira Top</strong>
-				<span>R$ 129,90</span>
-
-				<button type="button">
-					<div>
-						<MdAddShoppingCart size={16} color="#FFF" /> 3
-					</div>
-
-					<span>ADICIONAR AO CARRINHO</span>
-				</button>
-			</li>
-			<li>
-				<img
-					src="https://static.netshoes.com.br/produtos/58/HZM-1880-058/HZM-1880-058_detalhe1.jpg?ims=326x"
-					alt="Tênis"
-				/>
-
-				<strong>Chuteira Top</strong>
-				<span>R$ 129,90</span>
-
-				<button type="button">
-					<div>
-						<MdAddShoppingCart size={16} color="#FFF" /> 3
-					</div>
-
-					<span>ADICIONAR AO CARRINHO</span>
-				</button>
-			</li>
-		</ProductList>
-	);
+							<span>ADICIONAR AO CARRINHO</span>
+						</button>
+					</li>
+				))}
+			</ProductList>
+		);
+	}
 }
