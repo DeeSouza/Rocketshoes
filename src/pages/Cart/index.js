@@ -14,13 +14,13 @@ import * as CartActions from '../../store/modules/cart/actions';
 
 import { Container, ProductTable, Total } from './styles';
 
-function Cart({ cart, removeFromCart, updateAmount, total }) {
+function Cart({ cart, removeFromCart, updateAmountRequest, total }) {
 	function increment(product) {
-		updateAmount(product.id, product.amount + 1);
+		updateAmountRequest(product.id, product.amount + 1);
 	}
 
 	function decrement(product) {
-		updateAmount(product.id, product.amount - 1);
+		updateAmountRequest(product.id, product.amount - 1);
 	}
 
 	return (
@@ -134,6 +134,6 @@ Cart.propTypes = {
 		})
 	).isRequired,
 	removeFromCart: PropTypes.func.isRequired,
-	updateAmount: PropTypes.func.isRequired,
+	updateAmountRequest: PropTypes.func.isRequired,
 	total: PropTypes.string.isRequired,
 };
