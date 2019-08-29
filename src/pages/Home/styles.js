@@ -7,12 +7,25 @@ export const ProductList = styled.div`
 	grid-template-columns: repeat(3, 1fr);
 	grid-gap: 20px;
 
+	&:hover {
+		li:not(:hover) {
+			filter: grayscale(1);
+			opacity: 0.75;
+		}
+	}
+
 	li {
 		display: flex;
 		flex-direction: column;
 		background: #fff;
 		border-radius: 4px;
 		padding: 20px;
+		transition: all 0.3s ease-out;
+		transform: scale(1);
+
+		&:hover {
+			transform: scale(1.02);
+		}
 
 		img {
 			align-self: center;

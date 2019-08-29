@@ -13,7 +13,6 @@ export const Container = styled.div`
 		align-items: center;
 
 		button {
-			background: #7159c1;
 			color: #fff;
 			border: 0;
 			border-radius: 4px;
@@ -22,8 +21,21 @@ export const Container = styled.div`
 			text-transform: uppercase;
 			transition: background 0.2s;
 
-			&:hover {
-				background: ${darken(0.3, '#7159c1')};
+			&.done {
+				margin-right: 10px;
+				background: #7159c1;
+
+				&:hover {
+					background: ${darken(0.3, '#7159c1')};
+				}
+			}
+
+			&.buying {
+				background: #ff5722;
+
+				&:hover {
+					background: ${darken(0.3, '#FF5722')};
+				}
 			}
 		}
 	}
@@ -82,6 +94,8 @@ export const ProductTable = styled.table`
 export const Total = styled.div`
 	display: flex;
 	align-items: baseline;
+	align-self: flex-end;
+	margin-left: auto;
 
 	span {
 		color: #999;
@@ -91,5 +105,21 @@ export const Total = styled.div`
 	strong {
 		font-size: 28px;
 		margin-left: 5px;
+	}
+`;
+
+export const NoCart = styled.div`
+	color: #fff;
+	font-size: 16px;
+	background-color: #333;
+	padding: 20px 15px;
+	border-radius: 4px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+
+	svg {
+		margin-top: 20px;
 	}
 `;
