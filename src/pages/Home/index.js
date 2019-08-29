@@ -8,11 +8,12 @@ import api from '../../services/api';
 import * as CartActions from '../../store/modules/cart/actions';
 
 import { formatPrice } from '../../util/format';
-import { ProductList, NoProducts } from './styles';
+import { ProductList, NoProducts, Loading } from './styles';
 
 class Home extends Component {
 	state = {
 		products: [],
+		loading: true,
 	};
 
 	async componentDidMount() {
@@ -25,6 +26,7 @@ class Home extends Component {
 
 		this.setState({
 			products: data,
+			loading: false,
 		});
 	}
 
@@ -35,7 +37,7 @@ class Home extends Component {
 	};
 
 	render() {
-		const { products } = this.state;
+		const { products, loading } = this.state;
 		const { amount } = this.props;
 
 		return (
@@ -65,11 +67,18 @@ class Home extends Component {
 					))}
 				</ProductList>
 
-				{products.length === 0 && (
+				{!loading && products.length === 0 && (
 					<NoProducts>
 						<MdInfo size={25} color="#FFF" />
 						Que pena, vendemos todo nosso estoque!
 					</NoProducts>
+				)}
+
+				{loading && (
+					<Loading>
+						<div className="double-bounce1" />
+						<div className="double-bounce2" />
+					</Loading>
 				)}
 			</>
 		);
