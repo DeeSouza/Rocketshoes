@@ -45,7 +45,7 @@ export const ProductList = styled.div`
 			transition: background 0.2s;
 
 			&:hover {
-				background: ${darken(0.03, '#7159c1')};
+				background: ${darken(0.1, '#7159c1')};
 			}
 
 			div {
@@ -65,5 +65,19 @@ export const ProductList = styled.div`
 				font-weight: bolder;
 			}
 		}
+	}
+`;
+
+export const NoProducts = styled.div`
+	color: #fff;
+	font-size: 16px;
+	background-color: #333;
+	padding: 10px 15px;
+	border-radius: 4px;
+	display: flex;
+	align-items: center;
+
+	svg {
+		margin-right: 10px;
 	}
 `;

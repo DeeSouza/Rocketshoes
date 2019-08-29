@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
@@ -97,3 +98,14 @@ export default connect(
 	mapStateToProps,
 	mapDispatchToProps
 )(Cart);
+
+Cart.propTypes = {
+	cart: PropTypes.shape({
+		id: PropTypes.number,
+		amount: PropTypes.number,
+		title: PropTypes.string,
+		priceFormmated: PropTypes.string,
+		image: PropTypes.string,
+	}).isRequired,
+	removeFromCart: PropTypes.func.isRequired,
+};
