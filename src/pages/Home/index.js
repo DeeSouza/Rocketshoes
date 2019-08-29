@@ -28,10 +28,10 @@ class Home extends Component {
 		});
 	}
 
-	handleAddProduct = product => {
-		const { addToCart } = this.props;
+	handleAddProduct = id => {
+		const { addToCartRequest } = this.props;
 
-		addToCart(product);
+		addToCartRequest(id);
 	};
 
 	render() {
@@ -50,7 +50,9 @@ class Home extends Component {
 
 							<button
 								type="button"
-								onClick={() => this.handleAddProduct(product)}
+								onClick={() =>
+									this.handleAddProduct(product.id)
+								}
 							>
 								<div>
 									<MdAddShoppingCart size={16} color="#FFF" />{' '}
@@ -90,7 +92,7 @@ export default connect(
 )(Home);
 
 Home.propTypes = {
-	addToCart: PropTypes.func.isRequired,
+	addToCartRequest: PropTypes.func.isRequired,
 	amount: PropTypes.oneOfType([PropTypes.object, PropTypes.number])
 		.isRequired,
 };
