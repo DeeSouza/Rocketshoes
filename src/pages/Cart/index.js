@@ -124,13 +124,16 @@ export default connect(
 )(Cart);
 
 Cart.propTypes = {
-	cart: PropTypes.shape({
-		id: PropTypes.number,
-		amount: PropTypes.number,
-		title: PropTypes.string,
-		priceFormmated: PropTypes.string,
-		image: PropTypes.string,
-	}).isRequired,
+	cart: PropTypes.arrayOf(
+		PropTypes.shape({
+			id: PropTypes.number,
+			amount: PropTypes.number,
+			title: PropTypes.string,
+			priceFormmated: PropTypes.string,
+			image: PropTypes.string,
+		})
+	).isRequired,
 	removeFromCart: PropTypes.func.isRequired,
 	updateAmount: PropTypes.func.isRequired,
+	total: PropTypes.string.isRequired,
 };
