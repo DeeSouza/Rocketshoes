@@ -69,6 +69,16 @@ export const ProductList = styled.div`
 
 				svg {
 					margin-right: 5px;
+
+					&.spin {
+						animation: spinner 1s linear infinite;
+					}
+
+					@keyframes spinner {
+						to {
+							transform: rotate(360deg);
+						}
+					}
 				}
 			}
 

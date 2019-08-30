@@ -37,6 +37,7 @@ function* addToCart({ id }) {
 			...response.data,
 			amount: 1,
 			priceFormatted: formatPrice(response.data.price),
+			loadingAmount: true,
 		};
 
 		// PUT dispara actions

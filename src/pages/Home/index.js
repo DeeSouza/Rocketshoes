@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { MdAddShoppingCart, MdInfo } from 'react-icons/md';
+import { FaSpinner } from 'react-icons/fa';
 import PropTypes from 'prop-types';
 import api from '../../services/api';
 
@@ -14,6 +15,7 @@ class Home extends Component {
 	state = {
 		products: [],
 		loading: true,
+		id: 0,
 	};
 
 	async componentDidMount() {
@@ -22,6 +24,7 @@ class Home extends Component {
 		const data = response.data.map(product => ({
 			...product,
 			priceFormatted: formatPrice(product.price),
+			loadingAmount: true,
 		}));
 
 		this.setState({
@@ -33,12 +36,14 @@ class Home extends Component {
 	handleAddProduct = id => {
 		const { addToCartRequest } = this.props;
 
+		this.setState({ id });
+
 		addToCartRequest(id);
 	};
 
 	render() {
-		const { products, loading } = this.state;
-		const { amount } = this.props;
+		const { products, loading, id } = this.state;
+		const { amount, loadingAmount } = this.props;
 
 		return (
 			<>
@@ -57,7 +62,19 @@ class Home extends Component {
 								}
 							>
 								<div>
-									<MdAddShoppingCart size={16} color="#FFF" />{' '}
+									{!loadingAmount[product.id] &&
+									id === product.id ? (
+										<FaSpinner
+											className="spin"
+											color="#FFF"
+											size={16}
+										/>
+									) : (
+										<MdAddShoppingCart
+											size={16}
+											color="#FFF"
+										/>
+									)}{' '}
 									{amount[product.id] || 0}
 								</div>
 
@@ -84,13 +101,21 @@ class Home extends Component {
 		);
 	}
 }
-const mapStateToProps = state => ({
-	amount: state.cart.reduce((amount, product) => {
-		amount[product.id] = product.amount;
 
-		return amount;
-	}, {}),
-});
+const mapStateToProps = state => {
+	return {
+		amount: state.cart.reduce((amount, product) => {
+			amount[product.id] = product.amount;
+
+			return amount;
+		}, {}),
+		loadingAmount: state.cart.reduce((loadingAmount, product) => {
+			loadingAmount[product.id] = product.loadingAmount || false;
+
+			return loadingAmount;
+		}, {}),
+	};
+};
 
 const mapDispatchToProps = dispatch =>
 	bindActionCreators(CartActions, dispatch);
@@ -103,5 +128,7 @@ export default connect(
 Home.propTypes = {
 	addToCartRequest: PropTypes.func.isRequired,
 	amount: PropTypes.oneOfType([PropTypes.object, PropTypes.number])
+		.isRequired,
+	loadingAmount: PropTypes.oneOfType([PropTypes.object, PropTypes.number])
 		.isRequired,
 };
