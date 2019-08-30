@@ -27,7 +27,7 @@ Access http://localhost:3000
 
 2. Execute in root directory.
 
-		json-server -p 3333 -w -d 2000
+		json-server server.json -p 3333 -w -d 2000
 
 ## Author
 
