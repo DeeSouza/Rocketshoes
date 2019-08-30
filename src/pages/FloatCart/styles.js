@@ -56,6 +56,11 @@ export const ProductList = styled.ul`
 		margin-bottom: 10px;
 		height: 80px;
 		border-bottom: 1px solid #eee;
+		transition: background 0.2s ease-in;
+
+		&:hover {
+			background-color: #f7f7f7;
+		}
 
 		&:last-child {
 			margin-bottom: 0px;
