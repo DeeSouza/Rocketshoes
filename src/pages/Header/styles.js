@@ -13,12 +13,17 @@ export const Cart = styled(Link)`
 	align-items: center;
 	text-decoration: none;
 	transition: opacity 0.2s;
+	position: relative;
 
 	&:hover {
-		opacity: 0.7;
+		.float-cart {
+			opacity: 1;
+			top: 50px;
+			visibility: visible;
+		}
 	}
 
-	div {
+	> div.info {
 		text-align: right;
 		margin-right: 10px;
 

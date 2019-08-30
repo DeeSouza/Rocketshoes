@@ -7,6 +7,8 @@ import { MdShoppingBasket } from 'react-icons/md';
 import { Container, Cart } from './styles';
 import Logo from '../../assets/images/logo.svg';
 
+import FloatCart from '../FloatCart';
+
 function Header({ cartSize }) {
 	return (
 		<Container>
@@ -15,12 +17,14 @@ function Header({ cartSize }) {
 			</Link>
 
 			<Cart to="/cart">
-				<div>
+				<div className="info">
 					<strong>Meu Carrinho</strong>
 					<span>{cartSize} itens</span>
 				</div>
 
 				<MdShoppingBasket size={36} color="#FFF" />
+
+				{cartSize > 0 && <FloatCart />}
 			</Cart>
 		</Container>
 	);
