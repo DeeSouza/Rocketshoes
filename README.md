@@ -29,6 +29,17 @@ Access http://localhost:3000
 
 		json-server server.json -p 3333 -w -d 2000
 
+## Techs
+
+1. React
+2. Toastify
+3. Redux
+4. Redux Saga
+5. Reactotron
+6. ESLint
+7. Prettier
+8. Styled Components
+
 ## Author
 
 👤 **Diego Souza**
