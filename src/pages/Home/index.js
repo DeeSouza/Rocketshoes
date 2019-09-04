@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { MdAddShoppingCart, MdInfo } from 'react-icons/md';
@@ -11,95 +11,83 @@ import * as CartActions from '../../store/modules/cart/actions';
 import { formatPrice } from '../../util/format';
 import { ProductList, NoProducts, Loading } from './styles';
 
-class Home extends Component {
-	state = {
-		products: [],
-		loading: true,
-		id: 0,
-	};
+function Home({ amount, loadingAmount, addToCartRequest }) {
+	const [products, setProducts] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [id, setId] = useState(0);
 
-	async componentDidMount() {
-		const response = await api.get('products');
+	useEffect(() => {
+		async function loadProducts() {
+			const response = await api.get('products');
 
-		const data = response.data.map(product => ({
-			...product,
-			priceFormatted: formatPrice(product.price),
-			loadingAmount: true,
-		}));
+			const data = response.data.map(product => ({
+				...product,
+				priceFormatted: formatPrice(product.price),
+				loadingAmount: true,
+			}));
 
-		this.setState({
-			products: data,
-			loading: false,
-		});
+			setProducts(data);
+			setLoading(false);
+		}
+
+		loadProducts();
+	}, []); // [] = Executa apenas uma vez
+
+	function handleAddProduct(idProduct) {
+		setId(idProduct);
+
+		addToCartRequest(idProduct);
 	}
 
-	handleAddProduct = id => {
-		const { addToCartRequest } = this.props;
+	return (
+		<>
+			<ProductList>
+				{products.map(product => (
+					<li key={product.id}>
+						<img src={product.image} alt={product.title} />
 
-		this.setState({ id });
+						<strong>{product.title}</strong>
+						<span>{product.priceFormatted}</span>
 
-		addToCartRequest(id);
-	};
+						<button
+							type="button"
+							onClick={() => handleAddProduct(product.id)}
+						>
+							<div>
+								{!loadingAmount[product.id] &&
+								id === product.id ? (
+									<FaSpinner
+										className="spin"
+										color="#FFF"
+										size={16}
+									/>
+								) : (
+									<MdAddShoppingCart size={16} color="#FFF" />
+								)}{' '}
+								{amount[product.id] || 0}
+							</div>
 
-	render() {
-		const { products, loading, id } = this.state;
-		const { amount, loadingAmount } = this.props;
+							<span>ADICIONAR AO CARRINHO</span>
+						</button>
+					</li>
+				))}
+			</ProductList>
 
-		return (
-			<>
-				<ProductList>
-					{products.map(product => (
-						<li key={product.id}>
-							<img src={product.image} alt={product.title} />
+			{!loading && products.length === 0 && (
+				<NoProducts>
+					<MdInfo size={25} color="#FFF" />
+					Que pena, vendemos todo nosso estoque!
+				</NoProducts>
+			)}
 
-							<strong>{product.title}</strong>
-							<span>{product.priceFormatted}</span>
-
-							<button
-								type="button"
-								onClick={() =>
-									this.handleAddProduct(product.id)
-								}
-							>
-								<div>
-									{!loadingAmount[product.id] &&
-									id === product.id ? (
-										<FaSpinner
-											className="spin"
-											color="#FFF"
-											size={16}
-										/>
-									) : (
-										<MdAddShoppingCart
-											size={16}
-											color="#FFF"
-										/>
-									)}{' '}
-									{amount[product.id] || 0}
-								</div>
-
-								<span>ADICIONAR AO CARRINHO</span>
-							</button>
-						</li>
-					))}
-				</ProductList>
-
-				{!loading && products.length === 0 && (
-					<NoProducts>
-						<MdInfo size={25} color="#FFF" />
-						Que pena, vendemos todo nosso estoque!
-					</NoProducts>
-				)}
-
-				{loading && (
-					<Loading>
-						<div className="double-bounce1" />
-						<div className="double-bounce2" />
-					</Loading>
-				)}
-			</>
-		);
-	}
+			{loading && (
+				<Loading>
+					<div className="double-bounce1" />
+					<div className="double-bounce2" />
+				</Loading>
+			)}
+		</>
+	);
 }
 
 const mapStateToProps = state => {
