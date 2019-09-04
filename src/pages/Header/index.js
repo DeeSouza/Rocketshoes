@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { MdShoppingBasket } from 'react-icons/md';
 import { Container, Cart } from './styles';
@@ -9,7 +9,9 @@ import Logo from '../../assets/images/logo.svg';
 
 import FloatCart from '../FloatCart';
 
-function Header({ cartSize }) {
+export default function Header() {
+	const cartSize = useSelector(state => state.cart.length);
+
 	return (
 		<Container>
 			<Link to="/">
@@ -33,7 +35,3 @@ function Header({ cartSize }) {
 Header.propTypes = {
 	cartSize: PropTypes.number.isRequired,
 };
-
-export default connect(state => ({
-	cartSize: state.cart.length,
-}))(Header);

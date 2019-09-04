@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { MdAddShoppingCart, MdInfo } from 'react-icons/md';
 import { FaSpinner } from 'react-icons/fa';
-import PropTypes from 'prop-types';
 import api from '../../services/api';
 
 import * as CartActions from '../../store/modules/cart/actions';
@@ -11,10 +9,28 @@ import * as CartActions from '../../store/modules/cart/actions';
 import { formatPrice } from '../../util/format';
 import { ProductList, NoProducts, Loading } from './styles';
 
-function Home({ amount, loadingAmount, addToCartRequest }) {
+export default function Home() {
 	const [products, setProducts] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [id, setId] = useState(0);
+
+	const amount = useSelector(state =>
+		state.cart.reduce((amountProduct, product) => {
+			amountProduct[product.id] = product.amount;
+
+			return amountProduct;
+		}, {})
+	);
+
+	const loadingAmount = useSelector(state =>
+		state.cart.reduce((loadAmount, product) => {
+			loadAmount[product.id] = product.loadingAmount || false;
+
+			return loadAmount;
+		}, {})
+	);
+
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		async function loadProducts() {
@@ -36,7 +52,7 @@ function Home({ amount, loadingAmount, addToCartRequest }) {
 	function handleAddProduct(idProduct) {
 		setId(idProduct);
 
-		addToCartRequest(idProduct);
+		dispatch(CartActions.addToCartRequest(idProduct));
 	}
 
 	return (
@@ -89,34 +105,3 @@ function Home({ amount, loadingAmount, addToCartRequest }) {
 		</>
 	);
 }
-
-const mapStateToProps = state => {
-	return {
-		amount: state.cart.reduce((amount, product) => {
-			amount[product.id] = product.amount;
-
-			return amount;
-		}, {}),
-		loadingAmount: state.cart.reduce((loadingAmount, product) => {
-			loadingAmount[product.id] = product.loadingAmount || false;
-
-			return loadingAmount;
-		}, {}),
-	};
-};
-
-const mapDispatchToProps = dispatch =>
-	bindActionCreators(CartActions, dispatch);
-
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(Home);
-
-Home.propTypes = {
-	addToCartRequest: PropTypes.func.isRequired,
-	amount: PropTypes.oneOfType([PropTypes.object, PropTypes.number])
-		.isRequired,
-	loadingAmount: PropTypes.oneOfType([PropTypes.object, PropTypes.number])
-		.isRequired,
-};
